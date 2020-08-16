@@ -1,6 +1,4 @@
 apis.py
-.DS_Store
+.DS_Store/
+.vscode/
 __pycache__/
-junk/
-data/W.csv
-data/X.csv
