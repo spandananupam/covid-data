@@ -175,16 +175,11 @@ def makeGraph(dataset, model, districtStats, R, sigma):
                     except KeyError:
                         pass
 
-<<<<<<< HEAD:covid-data/data_utils.py
                 arrayFinal[dateIndex, districtIndex, 0] = number
                 arrayFinal[dateIndex, districtIndex, 1] = list(districtStats['Literacy rate'])[
                     districtIndex]
                 arrayFinal[dateIndex, districtIndex, 2] = list(
                     districtStats['Population'])[districtIndex]
-=======
-                arrayFinal[dateIndex, districtIndex] = ','.join((str(number), str(list(districtStats['Literacy rate'])[
-                    districtIndex]), str(list(districtStats['Population'])[districtIndex])))
->>>>>>> 18b3c87099f6afe0cebfc5b2f009b6c51b4f7532:graph.py
 
             else:
                 pass
@@ -205,13 +200,10 @@ def load_data(DATASET, R, SIGMA, TEST_NUMBER):
     model, districtStats = prepareDistrictModel()
     print('District ball-tree made')
     X, W = makeGraph(dataset, model, districtStats, R, SIGMA)
-<<<<<<< HEAD:covid-data/data_utils.py
     X_train = X[:TEST_NUMBER, :, :]
     X_test = X[TEST_NUMBER:, :, :]
-=======
     X_train = X[:TEST_NUMBER, :]
     X_test = X[TEST_NUMBER:, :]
->>>>>>> 18b3c87099f6afe0cebfc5b2f009b6c51b4f7532:graph.py
     print('Done executing')
     return X_train, X_test, W
 
