@@ -1,7 +1,7 @@
-sklearn
-geopy
-more_itertools
-pandas
+tensorflow
 numpy
-pickle
+pandas
+sklearn
+more_itertools
+geopy
 ast

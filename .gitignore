@@ -2,3 +2,4 @@ apis.py
 .DS_Store/
 .vscode/
 __pycache__/
+data/data.p

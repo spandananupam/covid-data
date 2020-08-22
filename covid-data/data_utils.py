@@ -2,6 +2,7 @@
 from sklearn.neighbors import BallTree, KNeighborsClassifier, kneighbors_graph, radius_neighbors_graph
 from geopy.geocoders import Bing
 from more_itertools import unique_everseen
+from tensorflow import tile
 import pandas as pd
 import numpy as np
 import pickle
@@ -189,25 +190,27 @@ def makeGraph(dataset, model, districtStats, R, sigma):
     E = radius_neighbors_graph(
         model, R/RADIUS_OF_EARTH, mode='distance', metric='haversine').toarray()
     W = 1 - np.exp(-(E*E)/sigma)
+    adj = np.where(W > 0, 1, 0)
+    # edge = W.reshape(1, W.shape[0]*W.shape[1])
+    return arrayFinal, W, adj
 
-    return arrayFinal, W
 
-
-def load_data(DATASET, R, SIGMA, TEST_NUMBER):
+def load_data(DATASET, R, SIGMA):
     print('Running')
     dataset = 'data/'+DATASET
     os.chdir(os.path.split(os.path.dirname(os.path.realpath(__file__)))[0])
     model, districtStats = prepareDistrictModel()
     print('District ball-tree made')
-    X, W = makeGraph(dataset, model, districtStats, R, SIGMA)
-    X_train = X[:TEST_NUMBER, :, :]
-    X_test = X[TEST_NUMBER:, :, :]
-    X_train = X[:TEST_NUMBER, :]
-    X_test = X[TEST_NUMBER:, :]
+    X, E, A = makeGraph(dataset, model, districtStats, R, SIGMA)
+    E = np.reshape(E, (1, np.shape(E)[0], np.shape(E)[1], 1))
+    E_final = tile(E, [np.shape(X)[0], 1, 1, 1])
+    A = np.reshape(A, (1, np.shape(A)[0], np.shape(A)[1]))
+    A_final = tile(A, [np.shape(X)[0], 1, 1])
+
     print('Done executing')
-    return X_train, X_test, W
+    return X, A_final, E_final
 
 
 if __name__ == '__main__':
-    X_train, X_test, W = load_data(
-        DATASET='data-all.json', R=300, SIGMA=1, TEST_NUMBER=100)
+    X, A, E = load_data(
+        DATASET='data-all.json', R=300, SIGMA=1)
